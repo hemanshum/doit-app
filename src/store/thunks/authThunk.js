@@ -1,7 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import Parse from 'parse/react-native';
 
-
 export const signup = createAsyncThunk('user/signup', async (user) => {
   const userCreate = new Parse.User();
 

@@ -7,7 +7,8 @@ const initialState = {
   isLoggedIn: false,
   isLoading: false,
   isError: false,
-  error: null
+  error: null,
+  showSplashScreen: true
 }
 
 export const authSlice = createSlice({
@@ -17,6 +18,15 @@ export const authSlice = createSlice({
     clearError(state) {
       state.error = null;
       state.isError = false;
+    },
+    autoLogin(state, action) {
+      state.isLoggedIn = true;
+      state.username = action.payload.username;
+      state.token = action.payload.token;
+      state.showSplashScreen = false;
+    },
+    hideSplashScreen(state) {
+      state.showSplashScreen = false;
     }
   },
   extraReducers(builder) {
@@ -79,5 +89,5 @@ export const authSlice = createSlice({
 // Action creators are generated for each case reducer function
 // export const { increment, decrement, incrementByAmount } = counterSlice.actions
 
-export const { clearError } = authSlice.actions;
+export const { clearError, autoLogin, hideSplashScreen } = authSlice.actions;
 export default authSlice.reducer;
