@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { addNewTask } from '../thunks/taskThunk';
+import { addNewTask, fetchTasks, deleteTask } from '../thunks/taskThunk';
 
 const initialState = {
   tasks: [],
@@ -17,7 +17,7 @@ export const taskSlice = createSlice({
       state.taskStatus = null;
       state.isError = false;
       state.error = null;
-    }
+    },
   },
   extraReducers(builder) {
     // Create New Task
@@ -30,6 +30,34 @@ export const taskSlice = createSlice({
       state.taskStatus = action.payload;
     });
     builder.addCase(addNewTask.rejected, (state, action) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.error = action.error.message;
+    })
+    // Fetch Task List
+    builder.addCase(fetchTasks.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(fetchTasks.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isError = false;
+      state.tasks = action.payload.taskList;
+    });
+    builder.addCase(fetchTasks.rejected, (state, action) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.error = action.error.message;
+    })
+    // Delete Task List
+    builder.addCase(deleteTask.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(deleteTask.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isError = false;
+      state.taskStatus = action.payload;
+    });
+    builder.addCase(deleteTask.rejected, (state, action) => {
       state.isLoading = false;
       state.isError = true;
       state.error = action.error.message;

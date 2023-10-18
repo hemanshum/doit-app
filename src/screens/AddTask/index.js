@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native'
 import { Button, HelperText, TextInput } from 'react-native-paper';
-import { addNewTask } from '../../store/thunks/taskThunk';
+import { addNewTask, fetchTasks } from '../../store/thunks/taskThunk';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearMessage } from '../../store/slices/taskSlice';
 
@@ -13,9 +13,10 @@ export const AddTaskScreen = () => {
   const { isError, error, isLoading, taskStatus } = useSelector(state => state.task)
 
   useEffect(() => {
-    if (taskStatus?.status === 'success' || isError) {
+    if (taskStatus?.status === 'created' || isError) {
       setTimeout(() => {
         dispatch(clearMessage());
+        dispatch(fetchTasks());
       }, 5000);
     }
   }, [taskStatus, isError]);
@@ -39,6 +40,7 @@ export const AddTaskScreen = () => {
           style={[styles.spacer, styles.btnStyle]}
           icon="text-box-plus-outline"
           mode="contained"
+          loading={isLoading}
           onPress={() => {
             dispatch(addNewTask({ title, description }));
             setTitle('');

@@ -30,6 +30,5 @@ export const login = createAsyncThunk('user/login', async (user) => {
 export const logout = createAsyncThunk('user/logout',
   async () => {
     await Parse.User.logOut();
-    console.log(Parse.User.currentAsync());
     return {}
   })

@@ -1,19 +1,35 @@
-import { StyleSheet, View } from "react-native"
+import { FlatList, StyleSheet, View } from "react-native"
 import { Button, Text } from "react-native-paper"
 import { useDispatch, useSelector } from "react-redux"
 import { logout } from "../../store/thunks/authThunk";
+import { TaskCardComponent } from "../../components";
+import { fetchTasks, deleteTask } from "../../store/thunks/taskThunk";
+import { useEffect } from "react";
+import { clearMessage } from "../../store/slices/taskSlice";
 
 
 export const HomeScreen = () => {
   const dispatch = useDispatch();
-  const { username } = useSelector(state => state.user)
+  const { tasks, isLoading, taskStatus } = useSelector(state => state.task)
+
+  useEffect(() => {
+    dispatch(fetchTasks());
+    setTimeout(() => {
+      dispatch(clearMessage())
+    }, 500);
+  }, [taskStatus?.status === 'removed'])
+
+  const handleRemoveTask = (taskId) => {
+    dispatch(deleteTask(taskId))
+  }
 
   return (
-    <View style={styles.container}>
-      <Text style={[styles.title, styles.spacer]}>Welcome {username}</Text>
-      <Button style={[styles.spacer, styles.btnStyle]} icon="logout" mode="contained" onPress={() => dispatch(logout())}>
-        Logout
-      </Button>
+    <View>
+      <FlatList
+        data={tasks}
+        renderItem={({ item }) => <TaskCardComponent data={item} handleRemoveTask={handleRemoveTask} isLoading={isLoading} />}
+        keyExtractor={item => item.id}
+      />
     </View>
   )
 }
