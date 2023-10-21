@@ -26,9 +26,16 @@ export const login = createAsyncThunk('user/login', async (user) => {
   }
 })
 
-// Please pause the video and write this 👇
+
 export const logout = createAsyncThunk('user/logout',
   async () => {
     await Parse.User.logOut();
     return {}
+  })
+
+export const resetPassword = createAsyncThunk('user/resetPassword',
+  async ({ password, newPassword }) => {
+    const status = await Parse.Cloud.run("resetPassword", { password, newPassword });
+
+    return JSON.parse(status);
   })

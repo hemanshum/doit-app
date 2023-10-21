@@ -8,7 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 //Initializing the SDK. 
 Parse.setAsyncStorage(AsyncStorage);
 Parse.initialize('myAppId');
-Parse.serverURL = 'https://3047-103-141-116-182.ngrok-free.app/parse';
+Parse.serverURL = 'https://5050-103-141-116-182.ngrok-free.app/parse';
 
 import MainNavigation from './src/navigation';
 

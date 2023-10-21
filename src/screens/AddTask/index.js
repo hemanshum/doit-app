@@ -54,7 +54,7 @@ export const AddTaskScreen = () => {
         <HelperText type="error" visible={isError}>
           {error}
         </HelperText>
-        <HelperText style={styles.helperText} type="info" visible={taskStatus?.status === 'success'}>
+        <HelperText style={styles.helperText} type="info" visible={taskStatus?.status === 'created'}>
           Status: {taskStatus?.message}
         </HelperText>
       </View>

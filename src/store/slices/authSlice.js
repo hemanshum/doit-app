@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { signup, login, logout } from '../thunks/authThunk'
+import { signup, login, logout, resetPassword } from '../thunks/authThunk'
 
 const initialState = {
   username: '',
@@ -8,7 +8,8 @@ const initialState = {
   isLoading: false,
   isError: false,
   error: null,
-  showSplashScreen: true
+  showSplashScreen: true,
+  userStatus: null
 }
 
 export const authSlice = createSlice({
@@ -40,6 +41,7 @@ export const authSlice = createSlice({
       state.isError = false;
       state.username = action.payload.username;
       state.token = action.payload.token;
+      state.userStatus = null;
     });
     builder.addCase(signup.rejected, (state, action) => {
       state.isLoading = false;
@@ -55,6 +57,7 @@ export const authSlice = createSlice({
       state.isLoading = false;
       state.isLoggedIn = true;
       state.isError = false;
+      state.userStatus = null;
       state.username = action.payload.username;
       state.token = action.payload.token;
     });
@@ -64,7 +67,6 @@ export const authSlice = createSlice({
       state.error = action.error.message;
     })
 
-    // 👇 Please pause the video and write this 👇
     // LOGOUT
     builder.addCase(logout.pending, (state, action) => {
       state.isLoading = true;
@@ -78,6 +80,25 @@ export const authSlice = createSlice({
       state.error = null;
     });
     builder.addCase(logout.rejected, (state, action) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.error = action.error.message;
+    })
+
+    // RESET PASSWORD
+    builder.addCase(resetPassword.pending, (state, action) => {
+      state.isLoading = true;
+    });
+    builder.addCase(resetPassword.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isLoggedIn = false;
+      state.isError = false;
+      state.username = null;
+      state.token = null;
+      state.error = null;
+      state.userStatus = action.payload;
+    });
+    builder.addCase(resetPassword.rejected, (state, action) => {
       state.isLoading = false;
       state.isError = true;
       state.error = action.error.message;

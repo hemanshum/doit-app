@@ -13,11 +13,13 @@ export const HomeScreen = () => {
   const { tasks, isLoading, taskStatus } = useSelector(state => state.task)
 
   useEffect(() => {
-    dispatch(fetchTasks());
-    setTimeout(() => {
-      dispatch(clearMessage())
-    }, 500);
-  }, [taskStatus?.status === 'removed'])
+    if (taskStatus?.status === 'removed') {
+      dispatch(fetchTasks());
+      setTimeout(() => {
+        dispatch(clearMessage())
+      }, 500);
+    }
+  }, [taskStatus])
 
   const handleRemoveTask = (taskId) => {
     dispatch(deleteTask(taskId))
